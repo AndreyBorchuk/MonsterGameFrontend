@@ -47,7 +47,7 @@ public class SpawnerInventory : MonoBehaviour
 
     Monster getMonsterById(string id)
     {
-        return DataHolder.Inventory[id];
+        return PlayerData.Inventory[id];
     }
 
     void SetupMonsterCard(GameObject spawnedMonster, Monster monsterData, Vector3 localPos, bool inTeam, GameObject parent)
@@ -75,8 +75,8 @@ public class SpawnerInventory : MonoBehaviour
 
     public void SpawnInventory()
     {
-        var monsterTeam = DataHolder.Team;
-        var monsters = DataHolder.Inventory;
+        var monsterTeam = PlayerData.Team;
+        var monsters = PlayerData.Inventory;
 
         if (monsters == null)
         {

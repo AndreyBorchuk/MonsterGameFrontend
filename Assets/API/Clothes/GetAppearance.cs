@@ -1,50 +1,35 @@
+using UnityEngine;
 using System.Collections;
 using System.Text;
-using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
+using System;
 
-public class LoadGame : MonoBehaviour
-{
-    public ErrorManager errorManager;
-    public GetInventory getInv;
-    public GetAppearance getAppear;
-    public GetClothes getClths;
-    public GameObject updateMessage;
-    private string validJoinUrl = "/api/valid_join";
+public class GetAppearance : MonoBehaviour
+{    
+    private string inventoryUrl = "/api/player/get_appearance";
+    private class ErrorResponse
+    {
+        public string error;
+        public int status_code;
+    }
     private class Payload
     {
         public string version;
         public string user_id;
         public string token;
     }
-    private class ErrorResponse
+
+    [Serializable]
+    private class SuccessResponse
     {
-        public string error;
+        public Appearance appearance;
         public int status_code;
     }
-    private class SuccessResponseValid
+    public void SendGetAppearance(ErrorManager errorManager, GameObject updateMessage, Action action)
     {
-        public string username;
-        public int status_code;
+        StartCoroutine(GetAppearanceCoroutine(errorManager, updateMessage, action));
     }
-    public void SendValidJoin()
-    {
-        StartCoroutine(SendRequestCoroutine());
-    }
-    private void ActionAfterClothes()
-    {
-        getAppear.SendGetAppearance(errorManager, updateMessage, ActionAfterApp);
-    }
-    private void ActionAfterApp()
-    {
-        getInv.SendGetInventory(errorManager, updateMessage, ActionAfterInv);
-    }
-    private void ActionAfterInv()
-    {
-        SceneManager.LoadScene("RoomScene");
-    }
-    public IEnumerator SendRequestCoroutine()
+    public IEnumerator GetAppearanceCoroutine(ErrorManager errorManager, GameObject updateMessage, Action action)
     {
         var payload = new Payload
         {
@@ -54,7 +39,7 @@ public class LoadGame : MonoBehaviour
         };
 
         var json = JsonUtility.ToJson(payload); // преобразуем структуру в json
-        var request = new UnityWebRequest(DataHolder.ApiURL + validJoinUrl, UnityWebRequest.kHttpVerbPOST);
+        var request = new UnityWebRequest(DataHolder.ApiURL + inventoryUrl, UnityWebRequest.kHttpVerbPOST); 
         
         request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -74,6 +59,7 @@ public class LoadGame : MonoBehaviour
             errorManager.SpawnErrorMessage("server_error_header", "server_error", true);
             yield break;
         }
+        Debug.Log(responseText);
 
         var response = JsonUtility.FromJson<ErrorResponse>(responseText); // преобразуем json в структуру ошибки, если она есть
         if (response != null && response.status_code == 6)
@@ -88,19 +74,11 @@ public class LoadGame : MonoBehaviour
             yield break;
         }
 
-        if (response != null && response.status_code == 1)
-        {
-            LoggedOut.Logout();
-            errorManager.SpawnErrorMessage("logged_out", response.error, true);
-            yield break;
-        }
-        
-
-        var responseSuccess = JsonUtility.FromJson<SuccessResponseValid>(responseText); // успешный ответ
+        var responseSuccess = JsonUtility.FromJson<SuccessResponse>(responseText); // успешный ответ
         if (responseSuccess != null && responseSuccess.status_code == 0)
         {
-            PlayerData.Username = responseSuccess.username;
-            getClths.SendGetClothes(errorManager, updateMessage, ActionAfterClothes);
+            PlayerData.PlayerAppearance = responseSuccess.appearance;
+            action();
             yield break;
         }
 

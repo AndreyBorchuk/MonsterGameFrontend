@@ -116,7 +116,7 @@ public class GetInventory : MonoBehaviour
         var responseSuccess = JsonUtility.FromJson<SuccessResponse>(responseText); // успешный ответ
         if (responseSuccess != null && responseSuccess.status_code == 0)
         {
-            DataHolder.Inventory = new Dictionary<string, Monster>(); // ВЫГРУЖАЕМ ДАННЫЕ, ЧТОБ ИСПОЛЬЗОВАТЬ ВЕЗДЕ
+            PlayerData.Inventory = new Dictionary<string, Monster>(); // ВЫГРУЖАЕМ ДАННЫЕ, ЧТОБ ИСПОЛЬЗОВАТЬ ВЕЗДЕ
             foreach (var item in responseSuccess.inventory)
             {
                 Monster monster = new Monster
@@ -136,13 +136,13 @@ public class GetInventory : MonoBehaviour
                     passive = item.stats.passive,
                     village = item.stats.village
                 };
-                DataHolder.Inventory.Add(item.monster_id, monster); 
+                PlayerData.Inventory.Add(item.monster_id, monster); 
             }
-            DataHolder.Team = responseSuccess.team;
-            DataHolder.Energy = responseSuccess.wallet.energy;
-            DataHolder.Level = responseSuccess.wallet.level;
-            DataHolder.CoinsDefault = responseSuccess.wallet.coins_default;
-            DataHolder.CoinsExpensive = responseSuccess.wallet.coins_expensive;
+            PlayerData.Team = responseSuccess.team;
+            PlayerData.Energy = responseSuccess.wallet.energy;
+            PlayerData.Level = responseSuccess.wallet.level;
+            PlayerData.CoinsDefault = responseSuccess.wallet.coins_default;
+            PlayerData.CoinsExpensive = responseSuccess.wallet.coins_expensive;
             action();
             yield break;
         }

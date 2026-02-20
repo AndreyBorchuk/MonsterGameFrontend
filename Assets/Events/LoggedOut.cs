@@ -5,7 +5,7 @@ public static class LoggedOut
 {
     public static void Logout()
     {
-        DataHolder.Username = "";
+        PlayerData.Username = "";
         PlayerPrefs.SetString("user_id", "");
         PlayerPrefs.SetString("token", "");
         SceneManager.LoadScene("InitScene");

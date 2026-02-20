@@ -27,10 +27,10 @@ public class DataUpdater : MonoBehaviour
     }
     void Update()
     {
-        var energy = DataHolder.Energy;
-        var expensive = DataHolder.CoinsExpensive;
-        var defaultCurrency = DataHolder.CoinsDefault;
-        var level = DataHolder.Level;
+        var energy = PlayerData.Energy;
+        var expensive = PlayerData.CoinsExpensive;
+        var defaultCurrency = PlayerData.CoinsDefault;
+        var level = PlayerData.Level;
 
         AmountEnergy.text = Normal(energy);
         AmountExpensive.text = Normal(expensive);
