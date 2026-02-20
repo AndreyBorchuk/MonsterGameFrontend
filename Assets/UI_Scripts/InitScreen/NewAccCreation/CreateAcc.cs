@@ -14,7 +14,7 @@ public class CreateAcc : MonoBehaviour
     public Toggle Agree;
     public GameObject mainGameScript;
     private string Gender = "male";
-    private string createAccountUrl = "http://localhost:3333/api/create_acc";
+    private string createAccountUrl = "/api/create_acc";
 
     public void SetGender(string gender)
     {
@@ -30,14 +30,14 @@ public class CreateAcc : MonoBehaviour
     {
         var payload = new CreateAccountPayload
         {
-            version = "1.0.0",
+            version = DataHolder.Version,
             username = Username.text,
             agree = Agree.isOn,
             gender = Gender
         };
 
         var json = JsonUtility.ToJson(payload);
-        var request = new UnityWebRequest(createAccountUrl, UnityWebRequest.kHttpVerbPOST);
+        var request = new UnityWebRequest(DataHolder.ApiURL + createAccountUrl, UnityWebRequest.kHttpVerbPOST);
         
         Debug.Log(json);
 
@@ -83,6 +83,7 @@ public class CreateAcc : MonoBehaviour
             PlayerPrefs.SetString("token", responseSuccess.token);
             PlayerPrefs.SetString("user_id", responseSuccess.user_id);
             mainGameScript.GetComponent<Init>().ChangeState(true);
+            
             yield break;
         }
 

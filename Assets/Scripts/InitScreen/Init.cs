@@ -39,7 +39,6 @@ public class Init : MonoBehaviour
     }
     void Start()
     {
-        PlayerPrefs.SetString("version", "1.0.0");
         CheckKeys();
         LoggedIn = CheckUser();
         ChangeState(LoggedIn); // добавить проверку на обновление

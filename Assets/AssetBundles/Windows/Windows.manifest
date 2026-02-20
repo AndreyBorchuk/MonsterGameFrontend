@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.5f1
+CRC: 3246623251
+HashAppended: 0
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: unifiedraytracing
+      Dependencies: {}
+    Info_1:
+      Name: fire1
+      Dependencies: {}
+    Info_2:
+      Name: leaf1
+      Dependencies: {}
+    Info_3:
+      Name: rock1
+      Dependencies: {}
+    Info_4:
+      Name: water1
+      Dependencies: {}
+    Info_5:
+      Name: wind1
+      Dependencies: {}

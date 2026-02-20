@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.5f1
+CRC: 4102560606
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fc7620fc17e39ff0f5c567fc2a9a71a6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bc9f87c7e64ff656997db0f2b2a91703
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 56809ea87140364a3ab7ac8cda93feb5
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/Monsters/fire1/fire1.png
+Dependencies: []

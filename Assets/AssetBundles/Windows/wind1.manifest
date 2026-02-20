@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.3.5f1
+CRC: 3419448724
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3dffe0c412ccb5d3300f184696aa2eb6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bc9f87c7e64ff656997db0f2b2a91703
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 894df0ebad1f08570edcc936526a00b3
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/Monsters/wind1/wind1.png
+Dependencies: []

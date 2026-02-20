@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LoadGame : MonoBehaviour
 {
     public ErrorManager errorManager;
+    public GetInventory getInv;
     public GameObject updateMessage;
-    private string validJoinUrl = "http://localhost:3333/api/valid_join";
-    private class ValidJoinPayload
+    private string validJoinUrl = "/api/valid_join";
+    private class Payload
     {
         public string version;
         public string user_id;
@@ -21,25 +21,30 @@ public class LoadGame : MonoBehaviour
         public string error;
         public int status_code;
     }
-    private class SuccessResponse
+    private class SuccessResponseValid
     {
+        public string username;
         public int status_code;
     }
     public void SendValidJoin()
     {
         StartCoroutine(SendRequestCoroutine());
     }
+    private void ActionAfter()
+    {
+        SceneManager.LoadScene("RoomScene");
+    }
     public IEnumerator SendRequestCoroutine()
     {
-        var payload = new ValidJoinPayload
+        var payload = new Payload
         {
-            version = PlayerPrefs.GetString("version"), // получаем данные из сохранений. version записывается в init
+            version = DataHolder.Version, // получаем данные из сохранений. version записывается в init
             user_id = PlayerPrefs.GetString("user_id"),
             token = PlayerPrefs.GetString("token")
         };
 
         var json = JsonUtility.ToJson(payload); // преобразуем структуру в json
-        var request = new UnityWebRequest(validJoinUrl, UnityWebRequest.kHttpVerbPOST);
+        var request = new UnityWebRequest(DataHolder.ApiURL + validJoinUrl, UnityWebRequest.kHttpVerbPOST);
         
         request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(json));
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -73,11 +78,19 @@ public class LoadGame : MonoBehaviour
             yield break;
         }
 
-        var responseSuccess = JsonUtility.FromJson<SuccessResponse>(responseText); // успешный ответ
+        if (response != null && response.status_code == 1)
+        {
+            LoggedOut.Logout();
+            errorManager.SpawnErrorMessage("logged_out", response.error, true);
+            yield break;
+        }
+        
+
+        var responseSuccess = JsonUtility.FromJson<SuccessResponseValid>(responseText); // успешный ответ
         if (responseSuccess != null && responseSuccess.status_code == 0)
         {
-            // do smth when load success
-            errorManager.SpawnErrorMessage("success", "success", true);
+            DataHolder.Username = responseSuccess.username;
+            getInv.SendGetInventory(errorManager, updateMessage, ActionAfter);
             yield break;
         }
 
